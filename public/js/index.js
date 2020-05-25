@@ -3,16 +3,16 @@ $(document).ready(function() {
      $(document).on("click", ".scrapeNewArticles", handleScrapeNewArticlesClick);
 
     function handleScrapeNewArticlesClick() {
-    console.log("a scrapedarticle button was pressed")
-    /*$.get("/api/scrapearticles").then(function(data) {
+          console.log("a scrapedarticle button was pressed");
+          $.get("/api/scrapearticles").then(function(data) {
 
-         var testRow = $("<div class='row'>");
+     /* var testRow = $("<div class='row'>");
       // If we are able to successfully scrape the NYTIMES and compare the articles to those
       // already in our collection, re render the articles on the page
       // and let the user know how many unique articles we were able to save
       testRow.text(data);
-      $("#testDiv").append(testRow);
-    });*/
+      $("#testDiv").append(testRow);*/
+          });
   }
 
   /*var articleContainer = $(".article-container");
