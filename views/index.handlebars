@@ -1,0 +1,69 @@
+<nav class="navbar navbar-expand-md fixed-top navbar-light bg-primary">
+     <a class="navbar-brand" href="#"> <span id="navTitle">Mongo Scraper</span>
+     </a>
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+     </button>
+     <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+               <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+               </li>
+               <li class="nav-item">
+                    <a class="nav-link" href="/savedarticles">Saved Articles</a>
+               </li>
+          </ul>
+          <form class="form-inline">
+               <button class="btn m-2 my-sm-0 btn-danger scrapeNewArticles" type="button">Scrape New
+                    Articles!</button>
+               <button class="btn m-2 my-sm-0 btn-danger" type="button" id="scrapeBtn">Clear Articles!</button>
+          </form>
+     </div>
+</nav>
+
+<div class="jumbotron jumbotron-fluid bg-cover my-5">
+     <div class="container">
+          <div class="row">
+               <div class="col-md-12 text-center text-white py-5">
+                    <h1>Mongo Scraper</h1>
+                    <p>This application scrapes the New York Times</p>
+               </div>
+          </div>
+     </div>
+</div>
+
+<div class="container-fluid mb-3 border" id="ifNoNewArticles">
+     <div class="row bg-warning my-3 py-2">
+          <div class="col-md-12 text-center text-white">
+               <span>No new articles are available for review</span>
+          </div>
+     </div>
+     <div class="row bg-info py-2">
+          <div class="col-md-12 text-center text-white">
+               <h4>What would you like to do?</h4>
+          </div>
+     </div>
+     <div class="row bg-light py-2">
+          <div class="col-md-12 text-center text-blue">
+               
+                    <a style="display: block" href="#" class="scrapeNewArticles">Scrape New Articles</a>
+               
+               
+                    <a style="display: block" href="/">Browse Articles</a>
+          
+          </div>
+     </div>
+</div>
+
+<div class="container-fluid" id="testDiv">
+</div>
+
+<footer class="container-fluid">
+     <div class="row text-center text-white bg-secondary">
+          <div class="col-md-12 pt-3">
+               <p>Mongo Scraper Application</p>
+          </div>
+     </div>
+</footer>
+
+<script type="text/javascript" src="/js/index.js"></script>
