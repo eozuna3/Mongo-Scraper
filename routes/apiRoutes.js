@@ -7,27 +7,31 @@ module.exports = function(app) {
           console.log("program has reached apiRoutes");
           axios.get("https://www.nytimes.com/").then(function(response) {
                var $ = cheerio.load(response.data);
-               var results = [];
-
+               var scrapeResults = [];
+               
                $("article.css-8atqhb").each(function(i, element) {
                     var articleTitle = $(element).find("h2.esl82me0").text();
                     var articleText = $(element).find("p").text();
                     var articleListText = $(element).find("li").text();
+                    var articleLink =  "https://www.nytimes.com" + $(element).find("a").attr("href");
                     if (articleText === ""){
                          if (articleListText !== "") {
-                              results.push({
+                              scrapeResults.push({
                                    articleTitle: articleTitle,
-                                   articleText: articleListText
+                                   articleText: articleListText,
+                                   articleLink: articleLink
                               });
                          }
                     } else {                    
-                         results.push({
+                         scrapeResults.push({
                               articleTitle: articleTitle,
-                              articleText: articleText
+                              articleText: articleText,
+                              articleLink: articleLink
                          });
                     }
                });
-               console.log(results);
+               console.log(scrapeResults);
+               res.json(scrapeResults)
           });
      });
 
