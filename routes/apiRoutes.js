@@ -1,6 +1,6 @@
 var cheerio = require("cheerio");
 var axios = require("axios");
-
+var db = require("../models");
 
 module.exports = function(app) {
      app.get("/api/scrapearticles", function(req, res) {
@@ -8,7 +8,7 @@ module.exports = function(app) {
           axios.get("https://www.nytimes.com/").then(function(response) {
                var $ = cheerio.load(response.data);
                var scrapeResults = [];
-               
+
                $("article.css-8atqhb").each(function(i, element) {
                     var articleTitle = $(element).find("h2.esl82me0").text();
                     var articleText = $(element).find("p").text();
@@ -30,8 +30,18 @@ module.exports = function(app) {
                          });
                     }
                });
-               console.log(scrapeResults);
-               res.json(scrapeResults)
+               //console.log(scrapeResults);
+
+               for (let index = 0; index < scrapeResults.length; index++) {
+                    db.Article.create(scrapeResults[index])
+                    .then(function(dbArticle) {
+                         console.log(dbArticle);
+                    })
+                    .catch(function(err) {
+                         console.log(err + "\n---Error occured with add new articles to database");
+                    });
+               }
+               res.end();
           });
      });
 

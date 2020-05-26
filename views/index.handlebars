@@ -32,7 +32,21 @@
      </div>
 </div>
 
-<div class="container-fluid mb-3 border" id="ifNoNewArticles">
+<div class="container-fluid" id="articleSection">
+     <div class="card text-white bg-info mb-3">
+          <div class="card-header">
+               <h3>Header
+               <button class="btn btn-success float-right">Save Article</button>
+               </h3>
+          </div>
+          <div class="card-body">
+               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+     </div>
+</div>
+
+{{#if hide}}
+<div class="container-fluid mb-3 border">
      <div class="row bg-warning my-3 py-2">
           <div class="col-md-12 text-center text-white">
                <span>No new articles are available for review</span>
@@ -54,6 +68,7 @@
           </div>
      </div>
 </div>
+{{/if}}
 
 <div class="container-fluid" id="testDiv">
 </div>
