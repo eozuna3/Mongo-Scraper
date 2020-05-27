@@ -1,18 +1,56 @@
 $(document).ready(function() {
      // OnClick Event handlers 
      $(document).on("click", ".scrapeNewArticles", handleScrapeNewArticlesClick);
+     $(document).on("click", "#clearArticlesBtn", handleClearArticlesBtnClick);
+     $(document).on("click", ".saveArticleBtn", function () { handleSaveArticleBtnClick($(this).data("id"))});
 
-    function handleScrapeNewArticlesClick() {
+     // Scrape NYT for articles
+     function handleScrapeNewArticlesClick() {
           console.log("a scrapedarticle button was pressed");
-          $.get("/api/scrapearticles").then(function(data) {
-
-      // If we are able to successfully scrape the NYTIMES and compare the articles to those
-      // already in our collection, re render the articles on the page
-      // and let the user know how many unique articles we were able to save
-          console.log("\n----------------------------\n")
-          console.log(data);
+          $.get("/api/scrapearticles")
+          .then(function(data) {
+          //console.log("\n----------------------------\n");
+          //console.log(data);
+          window.location.reload("/");
+          window.location.reload("/");
+          })
+          .catch(function (err) {
+               console.log("Error occurred and was unable to scrape Articles collection.\n");
+               console.log(err);
           });
-  }
+     }
+    
+     //  Handler for clearing all scraped articles from the articles collection     
+     function handleClearArticlesBtnClick(){
+          $.ajax({ 
+               url: "/api/cleararticles",
+               method: "DELETE" 
+          })
+          .then(function (data) {
+                console.log("Articles collection was cleared.");
+                window.location.reload("/");
+          })
+          .catch(function (err) {
+               console.log("Error occurred and was unable to clear Articles collection.\n");
+               console.log(err);
+          });
+     }
+
+     function handleSaveArticleBtnClick (articleId){
+       console.log(articleId + " save article button was pushed");
+       $.ajax({ 
+               url: "/api/updateSaved/" + articleId,
+               method: "PUT" 
+          })
+          .then(function (data) {
+                console.log("Article was saved.");
+                window.location.reload("/");
+          })
+          .catch(function (err) {
+               console.log("Error occurred and was unable to save article.\n");
+               console.log(err);
+          });
+     }
 
   /*var articleContainer = $(".article-container");
   $(document).on("click", ".btn.save", handleArticleSave);

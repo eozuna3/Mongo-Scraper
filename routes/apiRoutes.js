@@ -10,7 +10,7 @@ module.exports = function(app) {
                var scrapeResults = [];
 
                $("article.css-8atqhb").each(function(i, element) {
-                    var articleTitle = $(element).find("h2.esl82me0").text();
+                    var articleTitle = $(element).find("h2").text();
                     var articleText = $(element).find("p").text();
                     var articleListText = $(element).find("li").text();
                     var articleLink =  "https://www.nytimes.com" + $(element).find("a").attr("href");
@@ -31,6 +31,7 @@ module.exports = function(app) {
                     }
                });
                //console.log(scrapeResults);
+               //console.log("-----------------------------------\n")
 
                for (let index = 0; index < scrapeResults.length; index++) {
                     db.Article.create(scrapeResults[index])
@@ -45,17 +46,29 @@ module.exports = function(app) {
           });
      });
 
-  /* Create a new example
-  app.post("/api/examples", function(req, res) {
-    db.Example.create(req.body).then(function(dbExample) {
-      res.json(dbExample);
+     // Empty articles collection
+     app.delete("/api/cleararticles", function(req, res) {
+          db.Article.collection.drop()
+          .then (function (response){
+               console.log("Articles Collection was cleared successfully");
+               res.end();
+          })
+          .catch(function(err) {
+               console.log(err + "\n---Error occured with add trying to clear Articles Collection");
+          });
     });
-  });
 
-  // Delete an example by id
-  app.delete("/api/examples/:id", function(req, res) {
-    db.Example.destroy({ where: { id: req.params.id } }).then(function(dbExample) {
-      res.json(dbExample);
+    // Update savedArticle to true
+    app.put("/api/updateSaved/:id", function(req, res) {
+         console.log("\n------ You have reached saved article update api route----------------")
+         console.log(req.params.id);
+          /*db.Article.findOneAndUpdate({_id : req.params.id}, { articleSaved: true})
+          .then (function (response){
+               console.log("Articles Collection was cleared successfully");
+               res.end();
+          })
+          .catch(function(err) {
+               console.log(err + "\n---Error occured with add trying to clear Articles Collection");
+          });*/
     });
-  });*/
 };

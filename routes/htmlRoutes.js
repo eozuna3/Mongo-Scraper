@@ -5,19 +5,19 @@ module.exports = function(app) {
      app.get("/", function(req, res) {
           db.Article.find({articleSaved: false})
           .then(function (dbResults){
-               console.log("\n-------------------------------\n");
+               console.log("\n-----------HTMLROUTE LOAD INDEX ROUTE CALLED--------------------\n");
                console.log(dbResults)
                console.log("\n-------------------------------\n");
                if(dbResults.length > 0){
                     res.render("index", 
                     {
-                         results: dbResults,
+                         results: dbResults.map(result => result.toJSON()),
                          hide: false
                     });
                } else {
                     res.render("index", 
                     {
-                         results: dbResults,
+                         results: dbResults.map(result => result.toJSON()),
                          hide: true
                     });
                }
