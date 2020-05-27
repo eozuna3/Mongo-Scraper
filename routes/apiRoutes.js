@@ -62,13 +62,29 @@ module.exports = function(app) {
     app.put("/api/updateSaved/:id", function(req, res) {
          console.log("\n------ You have reached saved article update api route----------------")
          console.log(req.params.id);
-          /*db.Article.findOneAndUpdate({_id : req.params.id}, { articleSaved: true})
+         console.log("\n");
+          db.Article.findOneAndUpdate({_id : req.params.id}, { articleSaved: true})
           .then (function (response){
-               console.log("Articles Collection was cleared successfully");
+               console.log("articleSaved value  was successfully changed to true");
                res.end();
           })
           .catch(function(err) {
-               console.log(err + "\n---Error occured with add trying to clear Articles Collection");
-          });*/
+               console.log(err + "\n---Error occured with trying to change articleSaved value");
+          });
+    });
+
+    // Update savedArticle to false
+    app.put("/api/updateUnsaved/:id", function(req, res) {
+         console.log("\n------ You have reached saved article update api route----------------")
+         console.log(req.params.id);
+         console.log("\n");
+          db.Article.findOneAndUpdate({_id : req.params.id}, { articleSaved: false})
+          .then (function (response){
+               console.log("articleSaved value  was successfully changed to false");
+               res.end();
+          })
+          .catch(function(err) {
+               console.log(err + "\n---Error occured with trying to change articleSaved value");
+          });
     });
 };

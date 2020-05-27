@@ -5,9 +5,9 @@ module.exports = function(app) {
      app.get("/", function(req, res) {
           db.Article.find({articleSaved: false})
           .then(function (dbResults){
-               console.log("\n-----------HTMLROUTE LOAD INDEX ROUTE CALLED--------------------\n");
+               /*console.log("\n-----------HTMLROUTE LOAD INDEX ROUTE CALLED--------------------\n");
                console.log(dbResults)
-               console.log("\n-------------------------------\n");
+               console.log("\n-------------------------------\n");*/
                if(dbResults.length > 0){
                     res.render("index", 
                     {
@@ -29,7 +29,28 @@ module.exports = function(app) {
 
      // Load Save Articles Page
      app.get("/savedarticles", function(req, res) {
-          res.render("savedarticles");
+          db.Article.find({articleSaved: true})
+          .then(function (dbResults){
+               /*console.log("\n-----------HTMLROUTE LOAD SAVEDARTICLE ROUTE CALLED--------------------\n");
+               console.log(dbResults)
+               console.log("\n-------------------------------\n");*/
+               if(dbResults.length > 0){
+                    res.render("savedarticles", 
+                    {
+                         results: dbResults.map(result => result.toJSON()),
+                         hide: false
+                    });
+               } else {
+                    res.render("savedarticles", 
+                    {
+                         results: dbResults.map(result => result.toJSON()),
+                         hide: true
+                    });
+               }
+          })
+          .catch(function(err) {
+               res.json(err);
+          });
      });
 
      // Render 404 page for any unmatched routes

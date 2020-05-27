@@ -3,6 +3,7 @@ $(document).ready(function() {
      $(document).on("click", ".scrapeNewArticles", handleScrapeNewArticlesClick);
      $(document).on("click", "#clearArticlesBtn", handleClearArticlesBtnClick);
      $(document).on("click", ".saveArticleBtn", function () { handleSaveArticleBtnClick($(this).data("id"))});
+     $(document).on("click", ".unsaveArticleBtn", function () { handleUnsaveArticleBtnClick($(this).data("id"))});
 
      // Scrape NYT for articles
      function handleScrapeNewArticlesClick() {
@@ -36,6 +37,8 @@ $(document).ready(function() {
           });
      }
 
+     
+     // Onclick handler for the when the saveArticle button is pressed
      function handleSaveArticleBtnClick (articleId){
        console.log(articleId + " save article button was pushed");
        $.ajax({ 
@@ -44,6 +47,23 @@ $(document).ready(function() {
           })
           .then(function (data) {
                 console.log("Article was saved.");
+                window.location.reload("/");
+          })
+          .catch(function (err) {
+               console.log("Error occurred and was unable to save article.\n");
+               console.log(err);
+          });
+     }
+
+     // Onclick handler for the when the unsaveArticle button is pressed
+     function handleUnsaveArticleBtnClick (articleId){
+       console.log(articleId + " save article button was pushed");
+       $.ajax({ 
+               url: "/api/updateUnsaved/" + articleId,
+               method: "PUT" 
+          })
+          .then(function (data) {
+                console.log("Article was unsaved.");
                 window.location.reload("/");
           })
           .catch(function (err) {

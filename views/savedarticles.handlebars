@@ -37,8 +37,8 @@
      <div class="card text-white bg-info mb-3" id="{{this._id}}">
           <div class="card-header">
                <a class="text-white" target="_blank" href="{{this.articleLink}}">{{this.articleTitle}}</a>
-               <button class="btn btn-success float-right" data-id="{{this._id}}">Save Article</button>
-               </h3>
+               <button class="btn float-right ml-2 articleNoteBtn text-white" data-id="{{this._id}}">Article Notes</button>
+               <button class="btn btn-danger float-right unsaveArticleBtn" data-id="{{this._id}}">Delete From Saved</button>
           </div>
           <div class="card-body bg-white">
                <p class="card-text text-dark">{{this.articleText}}</p>
