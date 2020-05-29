@@ -87,4 +87,33 @@ module.exports = function(app) {
                console.log(err + "\n---Error occured with trying to change articleSaved value");
           });
     });
+
+    app.get("/api/notes/:id", function(req, res) {
+         console.log("\n------ You have reached get notes for passed article id api route----------------")
+         console.log(req.params.id);
+         console.log("\n");
+          db.Note.find({_id : req.params.id})
+          .then (function (response){
+               //console.log(response);
+               console.log("All notes related to articles have been successfully retrieved from the database");
+               res.send(response);
+          })
+          .catch(function(err) {
+               console.log(err + "\n---Error occured with trying to notes for selected article");
+          });
+    });
+
+    app.post("/api/savenote/:id", function(req, res) {
+          console.log("\n------ You have reached save note api route----------------")
+          console.log(req.params.id);
+          console.log("\n");
+          /*db.Article.create({_id : req.params.id}, { articleSaved: true})
+          .then (function (response){
+               console.log("articleSaved value  was successfully changed to true");
+               res.end();
+          })
+          .catch(function(err) {
+               console.log(err + "\n---Error occured with trying to change articleSaved value");
+          });*/
+    });
 };

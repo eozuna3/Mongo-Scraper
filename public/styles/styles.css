@@ -13,3 +13,7 @@
 .articleNoteBtn {
   background-color: rebeccapurple
 }
+
+ul {
+  list-style: none;
+}

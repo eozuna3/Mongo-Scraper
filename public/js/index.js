@@ -4,6 +4,9 @@ $(document).ready(function() {
      $(document).on("click", "#clearArticlesBtn", handleClearArticlesBtnClick);
      $(document).on("click", ".saveArticleBtn", function () { handleSaveArticleBtnClick($(this).data("id"))});
      $(document).on("click", ".unsaveArticleBtn", function () { handleUnsaveArticleBtnClick($(this).data("id"))});
+     $(document).on("click", ".articleNoteBtn", function () { handleArticleNoteBtnClick($(this).data("id"))});
+     $(document).on("click", "#closeNotesBtn", handleCloseNotesBtnClick);
+     $(document).on("click", "#saveNoteBtn", function () { handleSaveNoteBtnClick($(this).data("id"))});
 
      // Scrape NYT for articles
      function handleScrapeNewArticlesClick() {
@@ -57,7 +60,7 @@ $(document).ready(function() {
 
      // Onclick handler for the when the unsaveArticle button is pressed
      function handleUnsaveArticleBtnClick (articleId){
-       console.log(articleId + " save article button was pushed");
+      console.log(articleId + " save article button was pushed");
        $.ajax({ 
                url: "/api/updateUnsaved/" + articleId,
                method: "PUT" 
@@ -72,117 +75,58 @@ $(document).ready(function() {
           });
      }
 
-  /*var articleContainer = $(".article-container");
-  $(document).on("click", ".btn.save", handleArticleSave);
-  $(".clear").on("click", handleArticleClear);
+     function handleArticleNoteBtnClick (articleId){
+          console.log("\n" + articleId + " article note button was pushed\n");
+          $("#notesModal").modal({
+               show: true,
+               backdrop: "static",
+               keyboard: false
+          });
+          $.get("/api/notes/" + articleId)
+          .then(function(results) {
+               console.log(results);
+               $("#notesModalTitle").text("Notes For Article : " + articleId);
+               if (results.length > 0) {
+                   /*let availableNotes = [];
+                   for(let i = 0; i < results.length; i++){
+                     let noteBody = $("<li class='list-group-item'>")
+                      .text(results)                   }*/
 
-  function initPage() {
-    // Run an AJAX request for any unsaved headlines
-    $.get("/api/headlines?saved=false").then(function(data) {
-      articleContainer.empty();
-      // If we have headlines, render them to the page
-      if (data && data.length) {
-        renderArticles(data);
-      } else {
-        // Otherwise render a message explaining we have no articles
-        renderEmpty();
-      }
-    });
-  }
+                    console.log("notes available");
+                    $("#saveNoteBtn").data("id", articleId);
+               } else {
+                    $("#notesList").append("<li class='list-group-item'>No notes for this article yet.</li>");
+                    $("#saveNoteBtn").data("id", articleId);
+               }              
+          })
+          .catch(function (err) {
+               console.log("Error occurred and was unable to load the notes modal.\n");
+               console.log(err);
+          });
+     }
 
-  function renderArticles(articles) {
-    // This function handles appending HTML containing our article data to the page
-    // We are passed an array of JSON containing all available articles in our database
-    var articleCards = [];
-    // We pass each article JSON object to the createCard function which returns a bootstrap
-    // card with our article data inside
-    for (var i = 0; i < articles.length; i++) {
-      articleCards.push(createCard(articles[i]));
-    }
-    // Once we have all of the HTML for the articles stored in our articleCards array,
-    // append them to the articleCards container
-    articleContainer.append(articleCards);
-  }
+     function handleSaveNoteBtnClick (articleId){
+          console.log("\n-----Save note button was pushed\n");
+          console.log(articleId);
 
-  function createCard(article) {
-    // This function takes in a single JSON object for an article/headline
-    // It constructs a jQuery element containing all of the formatted HTML for the
-    // article card
-    var card = $("<div class='card'>");
-    var cardHeader = $("<div class='card-header'>").append(
-      $("<h3>").append(
-        $("<a class='article-link' target='_blank' rel='noopener noreferrer'>")
-          .attr("href", article.url)
-          .text(article.headline),
-        $("<a class='btn btn-success save'>Save Article</a>")
-      )
-    );
+          $.ajax({
+            method: "POST",
+            url: "/savenote/" + articleId,
+            data: { noteText: $("#noteBody").val()}
+          })
+          .then(function(data) {
+            console.log(data);
+          });
+          
+          $("#notesList").empty();
+          $("#noteBody").val("");
+          $("#notesModal").modal("hide");
+     }
 
-    var cardBody = $("<div class='card-body'>").text(article.summary);
-
-    card.append(cardHeader, cardBody);
-    // We attach the article's id to the jQuery element
-    // We will use this when trying to figure out which article the user wants to save
-    card.data("_id", article._id);
-    // We return the constructed card jQuery element
-    return card;
-  }
-
-  function renderEmpty() {
-    // This function renders some HTML to the page explaining we don't have any articles to view
-    // Using a joined array of HTML string data because it's easier to read/change than a concatenated string
-    var emptyAlert = $(
-      [
-        "<div class='alert alert-warning text-center'>",
-        "<h4>Uh Oh. Looks like we don't have any new articles.</h4>",
-        "</div>",
-        "<div class='card'>",
-        "<div class='card-header text-center'>",
-        "<h3>What Would You Like To Do?</h3>",
-        "</div>",
-        "<div class='card-body text-center'>",
-        "<h4><a class='scrape-new'>Try Scraping New Articles</a></h4>",
-        "<h4><a href='/saved'>Go to Saved Articles</a></h4>",
-        "</div>",
-        "</div>"
-      ].join("")
-    );
-    // Appending this data to the page
-    articleContainer.append(emptyAlert);
-  }
-
-  function handleArticleSave() {
-    // This function is triggered when the user wants to save an article
-    // When we rendered the article initially, we attached a javascript object containing the headline id
-    // to the element using the .data method. Here we retrieve that.
-    var articleToSave = $(this)
-      .parents(".card")
-      .data();
-
-    // Remove card from page
-    $(this)
-      .parents(".card")
-      .remove();
-
-    articleToSave.saved = true;
-    // Using a patch method to be semantic since this is an update to an existing record in our collection
-    $.ajax({
-      method: "PUT",
-      url: "/api/headlines/" + articleToSave._id,
-      data: articleToSave
-    }).then(function(data) {
-      // If the data was saved successfully
-      if (data.saved) {
-        // Run the initPage function again. This will reload the entire list of articles
-        initPage();
-      }
-    });
-  }
-
-  function handleArticleClear() {
-    $.get("api/clear").then(function() {
-      articleContainer.empty();
-      initPage();
-    });
-  }*/
+     function handleCloseNotesBtnClick () {
+       console.log("\n----Close note button was pushed---\n");
+       $("#notesList").empty();
+       $("#noteBody").val("");
+       $("#notesModal").modal("hide");
+     }
 });
