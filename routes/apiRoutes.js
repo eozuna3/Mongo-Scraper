@@ -64,11 +64,13 @@ module.exports = function(app) {
                     })
                     .catch(function(err) {
                          console.log(err + "\n---Error occured with add trying to clear Articles Collection");
+                         res.end();
                     });
                } else {
                     res.end();
                }
           });
+          res.end();
     });
     
     //Empty Notes Collection
@@ -82,12 +84,14 @@ module.exports = function(app) {
                          res.send(response);
                     })
                     .catch(function(err) {
-                         console.log(err + "\n---Error occured with add trying to clear Notes Collection");
+                         console.log(err + "\n---Error occured with trying to clear Notes Collection");
+                         res.end();
                     });
                } else {
                     res.end();
                }
           })
+          res.end();
     });
 
     // Update savedArticle to true

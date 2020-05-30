@@ -86,7 +86,8 @@ $(document).ready(function() {
                console.log(err);
           });
      }
-
+     
+     //  Onclick handler for when the article note button on the Saved Article page is pressed
      function handleArticleNoteBtnClick (articleId){
           console.log("\n" + articleId + " article note button was pushed\n");
           $("#notesModal").modal({
@@ -120,24 +121,29 @@ $(document).ready(function() {
           });
      }
 
+     //  Onclick handler for when the Save Note button is pressed in the notes modal
      function handleSaveNoteBtnClick (articleId){
           console.log("\n-----Save note button was pushed\n");
-          console.log(articleId);
 
-          $.ajax({
-            method: "POST",
-            url: "/api/savenote/" + articleId,
-            data: { noteText: $("#noteBody").val()}
-          })
-          .then(function(data) {
-            console.log(data);
-          });
-          
-          $("#notesList").empty();
-          $("#noteBody").val("");
-          $("#notesModal").modal("hide");
+          let noteContent = $("#noteBody").val().trim();
+          console.log(noteContent);
+          if(noteContent !== ""){
+               $.ajax({
+                    method: "POST",
+                    url: "/api/savenote/" + articleId,
+                    data: { noteText: noteContent}
+               })
+               .then(function(data) {
+                    console.log(data);
+               });
+
+               $("#notesList").empty();
+               $("#noteBody").val("");
+               $("#notesModal").modal("hide");
+          }
      }
 
+     //  Onclick handler for when the Close Note (x) button is pressed in the notes modal
      function handleCloseNotesBtnClick () {
        console.log("\n----Close note button was pushed---\n");
        $("#notesList").empty();
@@ -145,6 +151,7 @@ $(document).ready(function() {
        $("#notesModal").modal("hide");
      }
 
+     //  Onclick handler for when the Delete Note (x) button is pressed in the notes modal
      function handleDeleteNoteBtnClick (noteId, articleId){
       console.log(noteId + " Delete article button was pushed " + articleId);
        $.ajax({ 

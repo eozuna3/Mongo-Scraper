@@ -16,10 +16,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));
 
-var MONGODB_URI = process.env.MONGODB_URI || ("mongodb://localhost/nyt_database", { useNewUrlParser: true });
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/nyt_database";
 
 mongoose.connect(MONGODB_URI);
-//mongoose.connect("mongodb://localhost/nyt_database", { useNewUrlParser: true });
 
 // Handlebars
 app.engine(
