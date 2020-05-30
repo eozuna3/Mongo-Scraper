@@ -5,9 +5,6 @@ module.exports = function(app) {
      app.get("/", function(req, res) {
           db.Article.find({articleSaved: false})
           .then(function (dbResults){
-               /*console.log("\n-----------HTMLROUTE LOAD INDEX ROUTE CALLED--------------------\n");
-               console.log(dbResults)
-               console.log("\n-------------------------------\n");*/
                if(dbResults.length > 0){
                     res.render("index", 
                     {
@@ -31,9 +28,6 @@ module.exports = function(app) {
      app.get("/savedarticles", function(req, res) {
           db.Article.find({articleSaved: true})
           .then(function (dbResults){
-               /*console.log("\n-----------HTMLROUTE LOAD SAVEDARTICLE ROUTE CALLED--------------------\n");
-               console.log(dbResults)
-               console.log("\n-------------------------------\n");*/
                if(dbResults.length > 0){
                     res.render("savedarticles", 
                     {

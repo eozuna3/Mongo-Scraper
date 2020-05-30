@@ -7,14 +7,13 @@ $(document).ready(function() {
      $(document).on("click", ".articleNoteBtn", function () { handleArticleNoteBtnClick($(this).data("id"))});
      $(document).on("click", "#closeNotesBtn", handleCloseNotesBtnClick);
      $(document).on("click", "#saveNoteBtn", function () { handleSaveNoteBtnClick($(this).data("id"))});
+     $(document).on("click", ".deleteNoteBtn", function () { handleDeleteNoteBtnClick($(this).data("id"), $(this).data("articleid"))});
 
      // Scrape NYT for articles
      function handleScrapeNewArticlesClick() {
           console.log("a scrapedarticle button was pressed");
           $.get("/api/scrapearticles")
           .then(function(data) {
-          //console.log("\n----------------------------\n");
-          //console.log(data);
           window.location.reload("/");
           window.location.reload("/");
           })
@@ -63,7 +62,7 @@ $(document).ready(function() {
           })
           .then(function (data) {
                 console.log("Article was saved.");
-                window.location.reload("/");
+                window.location.reload();
           })
           .catch(function (err) {
                console.log("Error occurred and was unable to save article.\n");
@@ -80,7 +79,7 @@ $(document).ready(function() {
           })
           .then(function (data) {
                 console.log("Article was unsaved.");
-                window.location.reload("/");
+                window.location.reload();
           })
           .catch(function (err) {
                console.log("Error occurred and was unable to save article.\n");
@@ -104,7 +103,7 @@ $(document).ready(function() {
                if (articleNotes.length > 0) {
                     let availableNotes = [];
                     for(let i = 0; i < articleNotes.length; i++){
-                         let noteBody = $("<li class='list-group-item'>").text(articleNotes[i].noteText).append($("<button class='btn btn-danger float-right deleteNoteBtn' data-id='" + articleNotes[i]._id + "'>x</button>"));
+                         let noteBody = $("<li class='list-group-item'>").text(articleNotes[i].noteText).append($("<button class='btn btn-danger float-right deleteNoteBtn' data-id='" + articleNotes[i]._id + "' data-articleId='" + articleId + "'>x</button>"));
                          availableNotes.push(noteBody);
                     }
                     $("#notesList").append(availableNotes);
@@ -144,5 +143,27 @@ $(document).ready(function() {
        $("#notesList").empty();
        $("#noteBody").val("");
        $("#notesModal").modal("hide");
+     }
+
+     function handleDeleteNoteBtnClick (noteId, articleId){
+      console.log(noteId + " Delete article button was pushed " + articleId);
+       $.ajax({ 
+               url: "/api/deletenote/" + noteId,
+               method: "DELETE",
+               data: {
+                    noteID: noteId,
+                    articleID: articleId
+               }
+          })
+          .then(function (data) {
+                console.log("Selected note was deleted.");
+               $("#notesList").empty();
+               $("#noteBody").val("");
+               $("#notesModal").modal("hide");
+          })
+          .catch(function (err) {
+               console.log("Error occurred and was unable to delete a note.\n");
+               console.log(err);
+          });
      }
 });
