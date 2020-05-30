@@ -3,6 +3,7 @@ var axios = require("axios");
 var db = require("../models");
 
 module.exports = function(app) {
+     //  Scrape articles from the NYT
      app.get("/api/scrapearticles", function(req, res) {
           console.log("program has reached apiRoutes");
           axios.get("https://www.nytimes.com/").then(function(response) {
@@ -114,21 +115,25 @@ module.exports = function(app) {
           });
     });
 
+    //  Query the notes database to return all available notes to display in the notes modal
     app.get("/api/notes/:id", function(req, res) {
          console.log("\n------ You have reached get notes for passed article id api route----------------")
          console.log(req.params.id);
          console.log("\n");
-          db.Note.find({_id : req.params.id})
-          .then (function (response){
+          db.Article.find({_id : req.params.id})
+          .populate("notes")
+          .then (function (dbResults){
                //console.log(response);
                console.log("All notes related to articles have been successfully retrieved from the database");
-               res.send(response);
+               console.log(dbResults);
+               res.json(dbResults);
           })
           .catch(function(err) {
                console.log(err + "\n---Error occured with trying to notes for selected article");
           });
     });
 
+    //  Creation of a new note in the notes collection and linking it to the appropriate article
     app.post("/api/savenote/:id", function(req, res) {
           console.log("\n------ You have reached save note api route----------------")
           console.log(req.params.id);
@@ -137,7 +142,10 @@ module.exports = function(app) {
           db.Note.create(req.body)
           .then (function (dbNote){
                console.log("New note was successfully saved to note collection.");
-               res.send(dbNote);
+               return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { notes: dbNote._id } }, { new: true });
+          })
+          .then(function(dbArticle) {
+               res.json(dbArticle);
           })
           .catch(function(err) {
                console.log(err + "\n---Error occured with trying to add a new note to notes collection.");

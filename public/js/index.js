@@ -37,6 +37,7 @@ $(document).ready(function() {
                console.log("Error occurred and was unable to clear Articles collection.\n");
                console.log(err);
           });
+          window.location.reload();
 
           $.ajax({ 
                url: "/api/clearnotes",
@@ -96,12 +97,14 @@ $(document).ready(function() {
           });
           $.get("/api/notes/" + articleId)
           .then(function(results) {
-               console.log(results);
+               let articleNotes = results[0].notes;
+               console.log("\n---------Notes modal was activated.------------\n")
+               console.log(articleNotes);
                $("#notesModalTitle").text("Notes For Article : " + articleId);
-               if (results.length > 0) {
-                   let availableNotes = [];
-                    for(let i = 0; i < results.length; i++){
-                         let noteBody = $("<li class='list-group-item'>").text(results).append($("<button class='btn btn-danger deleteNoteBtn' data-id='" + results._id + "'>x</button>"));
+               if (articleNotes.length > 0) {
+                    let availableNotes = [];
+                    for(let i = 0; i < articleNotes.length; i++){
+                         let noteBody = $("<li class='list-group-item'>").text(articleNotes[i].noteText).append($("<button class='btn btn-danger float-right deleteNoteBtn' data-id='" + articleNotes[i]._id + "'>x</button>"));
                          availableNotes.push(noteBody);
                     }
                     $("#notesList").append(availableNotes);
