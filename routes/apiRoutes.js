@@ -48,14 +48,40 @@ module.exports = function(app) {
 
      // Empty articles collection
      app.delete("/api/cleararticles", function(req, res) {
-          db.Article.collection.drop()
-          .then (function (response){
-               console.log("Articles Collection was cleared successfully");
-               res.end();
-          })
-          .catch(function(err) {
-               console.log(err + "\n---Error occured with add trying to clear Articles Collection");
+          db.Article.count()
+          .then(function (response){
+               if(response > 0){
+                    db.Article.remove()
+                    .then (function (response){
+                         console.log("Articles Collection was cleared successfully");
+                         res.send(response);
+                    })
+                    .catch(function(err) {
+                         console.log(err + "\n---Error occured with add trying to clear Articles Collection");
+                    });
+               } else {
+                    res.end();
+               }
           });
+    });
+    
+    //Empty Notes Collection
+    app.delete("/api/clearnotes", function(req, res) {
+          db.Note.count()
+          .then(function (response){
+               if(response > 0){
+                    db.Note.remove()
+                    .then (function (response){
+                         console.log("Notes Collection was cleared successfully");
+                         res.send(response);
+                    })
+                    .catch(function(err) {
+                         console.log(err + "\n---Error occured with add trying to clear Notes Collection");
+                    });
+               } else {
+                    res.end();
+               }
+          })
     });
 
     // Update savedArticle to true
@@ -106,14 +132,15 @@ module.exports = function(app) {
     app.post("/api/savenote/:id", function(req, res) {
           console.log("\n------ You have reached save note api route----------------")
           console.log(req.params.id);
+          console.log(req.body);
           console.log("\n");
-          /*db.Article.create({_id : req.params.id}, { articleSaved: true})
-          .then (function (response){
-               console.log("articleSaved value  was successfully changed to true");
-               res.end();
+          db.Note.create(req.body)
+          .then (function (dbNote){
+               console.log("New note was successfully saved to note collection.");
+               res.send(dbNote);
           })
           .catch(function(err) {
-               console.log(err + "\n---Error occured with trying to change articleSaved value");
-          });*/
+               console.log(err + "\n---Error occured with trying to add a new note to notes collection.");
+          });
     });
 };

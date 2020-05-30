@@ -1,7 +1,7 @@
 $(document).ready(function() {
      // OnClick Event handlers 
      $(document).on("click", ".scrapeNewArticles", handleScrapeNewArticlesClick);
-     $(document).on("click", "#clearArticlesBtn", handleClearArticlesBtnClick);
+     $(document).on("click", ".clearArticlesBtn", handleClearArticlesBtnClick);
      $(document).on("click", ".saveArticleBtn", function () { handleSaveArticleBtnClick($(this).data("id"))});
      $(document).on("click", ".unsaveArticleBtn", function () { handleUnsaveArticleBtnClick($(this).data("id"))});
      $(document).on("click", ".articleNoteBtn", function () { handleArticleNoteBtnClick($(this).data("id"))});
@@ -24,7 +24,7 @@ $(document).ready(function() {
           });
      }
     
-     //  Handler for clearing all scraped articles from the articles collection     
+     //  Handler for clearing all scraped articles and notes from the articles collection     
      function handleClearArticlesBtnClick(){
           $.ajax({ 
                url: "/api/cleararticles",
@@ -32,12 +32,24 @@ $(document).ready(function() {
           })
           .then(function (data) {
                 console.log("Articles collection was cleared.");
-                window.location.reload("/");
           })
           .catch(function (err) {
                console.log("Error occurred and was unable to clear Articles collection.\n");
                console.log(err);
           });
+
+          $.ajax({ 
+               url: "/api/clearnotes",
+               method: "DELETE" 
+          })
+          .then(function (data) {
+                console.log("Notes collection was cleared.");
+          })
+          .catch(function (err) {
+               console.log("Error occurred and was unable to clear Notes collection.\n");
+               console.log(err);
+          });
+          window.location.reload();
      }
 
      
@@ -87,11 +99,12 @@ $(document).ready(function() {
                console.log(results);
                $("#notesModalTitle").text("Notes For Article : " + articleId);
                if (results.length > 0) {
-                   /*let availableNotes = [];
-                   for(let i = 0; i < results.length; i++){
-                     let noteBody = $("<li class='list-group-item'>")
-                      .text(results)                   }*/
-
+                   let availableNotes = [];
+                    for(let i = 0; i < results.length; i++){
+                         let noteBody = $("<li class='list-group-item'>").text(results).append($("<button class='btn btn-danger deleteNoteBtn' data-id='" + results._id + "'>x</button>"));
+                         availableNotes.push(noteBody);
+                    }
+                    $("#notesList").append(availableNotes);
                     console.log("notes available");
                     $("#saveNoteBtn").data("id", articleId);
                } else {
@@ -111,7 +124,7 @@ $(document).ready(function() {
 
           $.ajax({
             method: "POST",
-            url: "/savenote/" + articleId,
+            url: "/api/savenote/" + articleId,
             data: { noteText: $("#noteBody").val()}
           })
           .then(function(data) {
