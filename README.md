@@ -86,6 +86,10 @@ Below is an image of the Notes modal, which appears when the Articles note butto
 
   ![Image of screenshot](public/images/MongoScrape7.png)
 
+The Notes Modal shown below, lists 2 saved notes.  There is a red "x" button next to each note which when pressed will remove the note document from the Notes collection and close the modal box.
+
+  ![Image of screenshot](public/images/MongoScrape8.png)
+
 ### Links associated with the application
 1.  Link to git hub repository for this app:  [Github Link](https://github.com/eozuna3/Mongo-Scraper)
 2.  Link to deployed heroku website:  [Heroku Link](https://dry-bayou-13937.herokuapp.com/)
