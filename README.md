@@ -62,13 +62,17 @@ When you first git on the website it will take you to the home page.  Screenshot
 
   ![Image of screenshot](public/images/MongoScrape.png)
 
-You will see a text box in which the user can input in anytype of burger they wish.  Below the text box is submit button.  Once the user enters a burger and hits the submit button the newly entered burger appears on the left side of the screen along with an associated devour button as seen below.
+You will see a navigation bar which will have 2 links, one to the Home page and on to the Saved Articles page.  It also has 2 buttons.  The Scrape New Articles button will scrape the New York Times webpage for any available articles, unless this has already been done.  It will saved these scraped articles in a articles collection in the a mongodb and display the results to the homepage.  The clear articles button will empty the Articles collection in the mongodb along with the Notes collection.
 
-  ![Image of screenshot](public/assets/img/burger1.png)
+  ![Image of screenshot](public/assets/img/MongoScrape3.png)
 
-If the user decides to hit a devour button then the devour button along with its associated burger is removed from the left side of the screen and appears on the right as the burger has now been devoured.
+If no scrape has occured the Home page will ask what action you would like to take and gives you links to either Scarpe New Articles or go to the Saved Articles.  These links are circled in red below.
 
-  ![Image of screenshot](public/assets/img/burger2.png)
+  ![Image of screenshot](public/assets/img/MongoScrape2.png)
+
+If a scrape has occured the Home page will show a list of articles (example shown below).  The top text is the headline of the article, which is a link to the actual NYT article (circled in purple below), and also a Saved Article button which will remove the article from the list of scraped articles and move it the Saved Articles page (circled in red below). 
+
+  ![Image of screenshot](public/assets/img/MongoScrape4.png)
 
 ### Links associated with the application
 1.  Link to git hub repository for this app:  [Github Link](https://github.com/eozuna3/Mongo-Scraper)
