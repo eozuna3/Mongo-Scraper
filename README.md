@@ -74,6 +74,18 @@ If a scrape has occured the Home page will show a list of articles (example show
 
   ![Image of screenshot](public/images/MongoScrape4.png)
 
+Below is an image of the Saved Article Page which has a similar navigation bar to the Home page except it lacks the Scrape New Articles button.  If any articles have been saved then a list of the Saved Articles will appear with 2 buttons to the side of each article headline.  The headlines again are links to the actual website.  The red "Delete from Saved" article button will remove the associated Saved Article from the list of Saved Articles and place it back to the list of scraped but not Saved Articles.  The purple "Article Notes" note when clicked with activate a Notes modal when pressed.
+
+  ![Image of screenshot](public/images/MongoScrape5.png)
+
+If there are no scraped articles then the Saved Articles page will show a link back to the home page circled in red below.
+
+  ![Image of screenshot](public/images/MongoScrape6.png)
+
+Below is an image of the Notes modal, which appears when the Articles note button is pressed.  The modal header shows the associated id of the selected article.  The modal body will display a list of available notes and if no notes were made then it shows an alert that no notes for this article are available.  The body also has a textarea for the user to create a new note.  Finally, the modal footer has a Save Note button which will save the text entered into the textarea into the Notes collection.
+
+  ![Image of screenshot](public/images/MongoScrape7.png)
+
 ### Links associated with the application
 1.  Link to git hub repository for this app:  [Github Link](https://github.com/eozuna3/Mongo-Scraper)
 2.  Link to deployed heroku website:  [Heroku Link](https://dry-bayou-13937.herokuapp.com/)
